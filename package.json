@@ -1,7 +1,7 @@
 {
   "name": "sample_project",
   "version": "1.0.0",
-  "description": "",
+  "description": "ToDoList é uma lista de tarefas, desenvolvida usando a stack de tecnologias da CodeX:TypeScript, React, NodeJS, React Native e MongoDB.",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=prod node src/server.js",
@@ -22,19 +22,21 @@
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.7"
   },
-  "_moduleAliases": {
-    "@": "src",
-    "@app": "src/app.js",
-    "@config": "src/config/index.js",
-    "@controller": "src/controller",
-    "@service": "src/service",
-    "@helper": "src/helper",
-    "@model": "src/model"
-  },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "eslint": "^7.18.0",
     "mongodb-memory-server": "^6.9.3"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Desafio-Codex/ToDoList-BackEnd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Desafio-Codex/ToDoList-BackEnd/issues"
+  },
+  "homepage": "https://github.com/Desafio-Codex/ToDoList-BackEnd#readme"
 }
