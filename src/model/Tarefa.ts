@@ -1,45 +1,36 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { ITarefa } from './ITarefa';
 
-// Defina a interface que representa a estrutura dos dados da tarefa
-interface ITarefa extends Document {
-  nome: string;
-  descricao: string;
-}
-
-// Crie um esquema Mongoose para a Tarefa
-const TarefaSchema = new Schema<ITarefa>({
+// Defina o esquema para o modelo Tarefa
+export const tarefaSchema = new Schema({
   nome: String,
   descricao: String,
 });
 
-// Defina a classe Tarefa com construtor, getters e setters
-class Tarefa {
-  private _nome: string;
-  private _descricao: string;
+// Classe Tarefa
+export class Tarefa {
+  private _model;
 
   constructor(nome: string, descricao: string) {
-    this._nome = nome;
-    this._descricao = descricao;
+    this._model = model<ITarefa>('Tarefa', tarefaSchema);
+    this.nome = nome;
+    this.descricao = descricao;
   }
 
+  // Métodos getters e setters
   get nome(): string {
-    return this._nome;
+    return this._model.nome;
   }
 
-  set nome(novoNome: string) {
-    this._nome = novoNome;
+  set nome(nome: string) {
+    this._model.nome = nome;
   }
 
   get descricao(): string {
-    return this._descricao;
+    return this._model.descricao;
   }
 
-  set descricao(novaDescricao: string) {
-    this._descricao = novaDescricao;
+  set descricao(descricao: string) {
+    this._model.descricao = descricao;
   }
 }
-
-// Crie o modelo Mongoose para a Tarefa
-const TarefaModel = model<ITarefa>('Tarefa', TarefaSchema);
-
-export { Tarefa, TarefaModel };

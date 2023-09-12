@@ -1,21 +1,41 @@
-class Perfil {
-  nomeCompleto: string;
-  genero: string;
-  idade: number;
-  email: string;
-  senha: string;
-  tarefas: Tarefa[] = []; // Lista ligada de tarefas
+import { Schema, model, Types } from 'mongoose';
+import { IPerfil } from './IPerfil';
+import { tarefaSchema } from './Tarefa';
 
-  constructor(nomeCompleto: string, genero: string, idade: number, email: string, senha: string) {
-    this.nomeCompleto = nomeCompleto;
-    this.genero = genero;
-    this.idade = idade;
-    this.email = email;
-    this.senha = senha;
+const perfilSchema = new Schema({
+  nomeCompleto: String,
+  idade: Number, // Corrigido para 'Number'
+  genero: String,
+  email: String,
+  senha: String,
+  foto: { type: Types.ObjectId, ref: 'Imagem' },
+  usuarioLogado: Boolean,
+  listaDeTarefas: [tarefaSchema],
+});
+
+const PerfilModel = model<IPerfil>('Perfil', perfilSchema);
+
+export class Perfil {
+  _model: IPerfil;
+  constructor(
+    nomeCompleto: string,
+    idade: number,
+    genero: string,
+    email: string,
+    senha: string
+  ) {
+    this._model = new PerfilModel({
+      nomeCompleto,
+      idade,
+      genero,
+      email,
+      senha,
+      usuarioLogado: false,
+      listaDeTarefas: [],
+    });
   }
 
-  adicionarTarefa(nome: string, descricao: string) {
-    const novaTarefa = new Tarefa(nome, descricao);
-    this.tarefas.push(novaTarefa);
+  getModel() {
+    return this._model;
   }
 }
