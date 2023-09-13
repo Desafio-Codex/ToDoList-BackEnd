@@ -1,90 +1,138 @@
 import { Request, Response } from 'express';
-import PerfilController from './PerfilController'; // Importe a classe PerfilController
+import { CadastrarPerfilService } from '../service/CadastrarPerfilService';
+import { EntrarPerfilService } from '../service/EntrarPerfilService';
+import { SairPerfilService } from '../service/SairPerfilService';
+import { EditarNomePerfilService } from '../service/EditarNomePerfilService';
+import { EditarIdadePerfilService } from '../service/EditarIdadePerfilService';
+import { EditarFotoPerfilService } from '../service/EditarFotoPerfilService';
+import { AdicionarTarefaService } from '../service/AdicionarTarefaService';
+import { EditarNomeTarefaService } from '../service/EditarNomeTarefaService';
+import { EditarDescTarefaService } from '../service/EditarDescTarefaService';
+import { ExcluirTarefaService } from '../service/ExcluirTarefaService';
+import { VisualizarTarefaService } from '../service/VisualizarTarefaService';
+
 
 class UsuarioController {
-  private perfilController: PerfilController;
+  private cadastrarPerfilService: CadastrarPerfilService;
+  private entrarPerfilService: EntrarPerfilService;
+  private sairPerfilService: SairPerfilService;
+  private editarNomePerfilService: EditarNomePerfilService;
+  private editarIdadePerfilService: EditarIdadePerfilService;
+  private editarFotoPerfilService: EditarFotoPerfilService;
+  private adicionarTarefaService: AdicionarTarefaService;
+  private editarNomeTarefaService: EditarNomeTarefaService;
+  private editarDescTarefaService: EditarDescTarefaService;
+  private excluirTarefaService: ExcluirTarefaService;
+  private visualizarTarefaService: VisualizarTarefaService;
 
-  constructor(perfilController: PerfilController) {
-    this.perfilController = perfilController;
+  constructor(
+    cadastrarPerfilService: CadastrarPerfilService,
+    entrarPerfilService: EntrarPerfilService,
+    sairPerfilService: SairPerfilService,
+    editarNomePerfilService: EditarNomePerfilService,
+    editarIdadePerfilService: EditarIdadePerfilService,
+    editarFotoPerfilService: EditarFotoPerfilService,
+    adicionarTarefaService: AdicionarTarefaService,
+    editarNomeTarefaService: EditarNomeTarefaService,
+    editarDescTarefaService: EditarDescTarefaService,
+    excluirTarefaService: ExcluirTarefaService,
+    visualizarTarefaService: VisualizarTarefaService,
+  ) {
+    this.cadastrarPerfilService = cadastrarPerfilService;
+    this.entrarPerfilService = entrarPerfilService;
+    this.sairPerfilService = sairPerfilService;
+    this.editarNomePerfilService = editarNomePerfilService;
+    this.editarIdadePerfilService = editarIdadePerfilService;
+    this.editarFotoPerfilService = editarFotoPerfilService;
+    this.adicionarTarefaService = adicionarTarefaService;
+    this.editarNomeTarefaService = editarNomeTarefaService;
+    this.editarDescTarefaService = editarDescTarefaService;
+    this.excluirTarefaService = excluirTarefaService;
+    this.visualizarTarefaService = visualizarTarefaService;
   }
 
   public cadastrarPerfil(req: Request, res: Response): void {
     const { nome, idade, genero, email, senha } = req.body;
-    const resultado = this.perfilController.cadastrarPerfil(nome, idade, genero, email, senha);
+    const resultado = this.cadastrarPerfilService.cadastrarPerfil(nome, idade, genero, email, senha);
     res.json({ mensagem: resultado });
   }
 
   public entrarPerfil(req: Request, res: Response): void {
     const { email, senha } = req.body;
-    this.perfilController.entrarPerfil(email, senha);
-    res.json({ mensagem: 'Perfil logado com sucesso.' });
+    const resultado = this.entrarPerfilService.entrarPerfil(email, senha);
+    res.json({ mensagem: resultado });
   }
 
   public sairPerfil(req: Request, res: Response): void {
     const { email } = req.body;
-    this.perfilController.sairPerfil(email);
-    res.json({ mensagem: 'Perfil deslogado com sucesso.' });
+    const resultado = this.sairPerfilService.sairPerfil(email);
+    res.json({ mensagem: resultado });
   }
 
-  public alteraNomePerfil(req: Request, res: Response): void {
-    const { email, senha, nome } = req.body;
-    this.perfilController.alteraNomePerfil(email, senha, nome);
-    res.json({ mensagem: 'Nome do perfil alterado com sucesso.' });
+  public editarNomePerfil(req: Request, res: Response): void {
+    const { email, nome } = req.body;
+    const resultado = this.editarNomePerfilService.editarNomePerfil(email, nome);
+    res.json({ mensagem: resultado });
   }
 
-  public alteraIdadePerfil(req: Request, res: Response): void {
-    const { email, senha, idade } = req.body;
-    this.perfilController.alteraIdadePerfil(email, senha, idade);
-    res.json({ mensagem: 'Idade do perfil alterada com sucesso.' });
+  public editarIdadePerfil(req: Request, res: Response): void {
+    const { email, idade } = req.body;
+    const resultado = this.editarIdadePerfilService.editarIdadePerfil(email, idade);
+    res.json({ mensagem: resultado });
   }
 
-  public alteraFotoPerfil(req: Request, res: Response): void {
+  public editarFotoPerfil(req: Request, res: Response): void {
     const { email, senha, foto } = req.body;
-    this.perfilController.alteraFotoPerfil(email, senha, foto);
-    res.json({ mensagem: 'Foto do perfil alterada com sucesso.' });
+    const resultado = this.editarFotoPerfilService.editarFotoPerfil(email, foto);
+    res.json({ mensagem: resultado });
   }
 
-  public adicionaTarefa(req: Request, res: Response): void {
-    const { email, senha, tarefa } = req.body;
-    this.perfilController.adicionaTarefa(email, senha, tarefa);
-    res.json({ mensagem: 'Tarefa adicionada com sucesso.' });
+  public adicionarTarefa(req: Request, res: Response): void {
+    const { email, nome, descricao } = req.body;
+    const resultado = this.adicionarTarefaService.adicionarTarefa(email, nome, descricao);
+    res.json({ mensagem: resultado });
   }
 
-  public editaNome(req: Request, res: Response): void {
-    const { email, senha, nome, tarefa } = req.body;
-    this.perfilController.editaNome(email, senha, nome, tarefa);
-    res.json({ mensagem: 'Nome da tarefa editado com sucesso.' });
+  public editarNomeTarefa(req: Request, res: Response): void {
+    const { email, nome1, nome2 } = req.body;
+    const resultado = this.editarNomeTarefaService.editarNomeTarefa(email, nome1, nome2);
+    res.json({ mensagem: resultado });
   }
 
-  public editaDescricao(req: Request, res: Response): void {
+  public editarDescricao(req: Request, res: Response): void {
     const { email, senha, nome, descricao } = req.body;
-    this.perfilController.editaDescricao(email, senha, nome, descricao);
-    res.json({ mensagem: 'Descrição da tarefa editada com sucesso.' });
+    const resultado = this.editarDescTarefaService.editarDescTarefa(email, nome, descricao);
+    res.json({ mensagem: resultado });
   }
 
-  public excluiTarefa(req: Request, res: Response): void {
+  public excluirTarefa(req: Request, res: Response): void {
     const { email, senha, tarefa } = req.body;
-    this.perfilController.excluiTarefa(email, senha, tarefa);
-    res.json({ mensagem: 'Tarefa excluída com sucesso.' });
+    const resultado = this.excluirTarefa.excluirTarefa(email, tarefa);
+    if (resultado) {
+      res.json({ mensagem: "Tarefa excluída com sucesso!" })
+    }
+    else {
+      res.json({ mensagem: "Ação não pode ser realizada" });
+    }
   }
 
-  public visualizaTarefaHoje(req: Request, res: Response): void {
+  public concluirTarefa(req: Request, res: Response): void {
     const { email, senha, tarefa } = req.body;
-    this.perfilController.visualizaTarefaHoje(email, senha, tarefa);
-    res.json({ mensagem: 'Tarefa de hoje visualizada com sucesso.' });
+    const resultado = this.excluirTarefa.excluirTarefa(email, tarefa);
+    if (resultado) {
+      res.json({ mensagem: "Tarefa concluída com sucesso!" })
+    }
+    else {
+      res.json({ mensagem: "Ação não pode ser realizada" });
+    }
   }
 
-  public visualizaTarefaPassado(req: Request, res: Response): void {
+  public visualizarTarefa(req: Request, res: Response): void {
     const { email, senha, tarefa } = req.body;
-    this.perfilController.visualizaTarefaPassado(email, senha, tarefa);
-    res.json({ mensagem: 'Tarefa do passado visualizada com sucesso.' });
+    const resultado = this.visualizarTarefaService.visualizarTarefas(email);
+    res.json({ mensagem: resultado });
   }
 
-  public visualizaTarefaFuturo(req: Request, res: Response): void {
-    const { email, senha, tarefa } = req.body;
-    this.perfilController.visualizaTarefaFuturo(email, senha, tarefa);
-    res.json({ mensagem: 'Tarefa do futuro visualizada com sucesso.' });
-  }
 }
 
 export default UsuarioController;

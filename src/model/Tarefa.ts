@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import { ITarefa } from './ITarefa';
 
 // Defina o esquema para o modelo Tarefa
@@ -8,8 +8,8 @@ export const tarefaSchema = new Schema({
 });
 
 // Classe Tarefa
-export class Tarefa {
-  private _model;
+class Tarefa {
+  private _model: Model<ITarefa>;
 
   constructor(nome: string, descricao: string) {
     this._model = model<ITarefa>('Tarefa', tarefaSchema);
@@ -34,3 +34,5 @@ export class Tarefa {
     this._model.descricao = descricao;
   }
 }
+
+export default Tarefa;

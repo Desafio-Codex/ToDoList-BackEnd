@@ -9,7 +9,6 @@ export interface IPerfil extends Document {
   senha: string;
   foto: Types.ObjectId | null;
   usuarioLogado: boolean;
-  listaDeTarefas: ITarefa[];
+  listaTarefas: ITarefa[];
+  imagem: Buffer
 }
-
-export { ITarefa };

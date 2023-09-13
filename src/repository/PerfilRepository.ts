@@ -1,56 +1,154 @@
-import { Perfil } from "../model/Perfil";
-import { Tarefa } from "../model/Tarefa";
+import Perfil from "../model/Perfil";
+import Tarefa from "../model/Tarefa";
 
-class TarefaRepository {
-  private mapaTarefas: Map<string, Tarefa>;
+class PerfilRepository {
+  private mapaPerfis: Map<string, Perfil>;
 
   constructor() {
-    this.mapaTarefas = new Map<string, Tarefa>();
+    this.mapaPerfis = new Map<string, Perfil>();
   }
 
-  public async cadastrarPerfil(perfil: Perfil): Promise<string> {
-    // Implemente a lógica para entrar no perfil aqui
+  public cadastrarPerfil(perfil: Perfil): string {
+    this.mapaPerfis.set(perfil.getModel().email, perfil);
+    return "Cadastro realizado com sucesso";
   }
 
-  public async entrarPerfil(email: string, senha: string): Promise<void> {
-    // Implemente a lógica para entrar no perfil aqui
+  entrarPerfil(email: string, senha: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!; // "!" serve para afirmar que o perfil existe
+      if (perfil.getModel().senha === senha) {
+        if (!perfil.getModel().usuarioLogado) {
+          perfil.setUsuarioLogado();
+          this.mapaPerfis.set(email, perfil);
+        }
+        return "Login realizado com sucesso!";
+      }
+    }
+    return "Email ou senha de usuário inválido(s)!";
   }
 
-  public async sairPerfil(email: string): Promise<void> {
-    // Implemente a lógica para sair do perfil aqui
+  public sairPerfil(email: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (perfil.getModel().usuarioLogado) {
+        perfil.setUsuarioLogado();
+        this.mapaPerfis.set(email, perfil);
+      }
+      return "Usuário deslogou.";
+    }
+    return "Email inválido";
   }
 
-  public async alteraNomePerfil(email: string, senha: string, nome: string): Promise<void> {
-    // Implemente a lógica para alterar o nome do perfil aqui
+  public editarNomePerfil(email: string, nome: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      perfil.setNome(nome);
+      this.mapaPerfis.set(email, perfil);
+      return "Nome do usuário alterado com sucesso!"
+    }
+    return "Email inválido!";
   }
 
-  public async alteraIdadePerfil(email: string, senha: string, idade: number): Promise<void> {
-    // Implemente a lógica para alterar a idade do perfil aqui
+  public editarIdadePerfil(email: string, idade: number): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      perfil.setIdade(idade);
+      this.mapaPerfis.set(email, perfil);
+      return "Nome do usuário alterado com sucesso!"
+    }
+    return "Email inválido!";
   }
 
-  public async alteraFotoPerfil(email: string, senha: string, foto: string): Promise<void> {
-    // Implemente a lógica para alterar a foto do perfil aqui
+  public editarFotoPerfil(email: string, foto: Buffer): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      perfil.setImagem(foto);
+      this.mapaPerfis.set(email, perfil);
+      return "Nome do usuário alterado com sucesso!"
+    }
+    return "Email inválido!";
   }
 
-  public async adicionaTarefa(email: string, senha: string, tarefa: Tarefa): Promise<void> {
-    // Implemente a lógica para adicionar uma tarefa ao perfil aqui
+  public adicionarTarefa(email: string, tarefa: Tarefa): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      perfil.adicionarTarefa(tarefa);
+      this.mapaPerfis.set(email, perfil);
+      return "Tarefa adicionada com sucesso!";
+    }
+    return "Email inválido!";
   }
 
-  public async editaNome(email: string, senha: string, nome: string, tarefa: Tarefa): Promise<void> {
-    // Implemente a lógica para editar o nome de uma tarefa aqui
+  public editarNomeTarefa(email: string, nome1: string, nome2: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      const resultado = perfil.atualizarNomeTarefa(nome1, nome2);
+      if (resultado) {
+        this.mapaPerfis.set(email, perfil);
+        return "Nome da tarefa com sucesso!";
+      }
+      return "Tarefa não encontrada!"
+    }
+    return "Email inválido!";
   }
 
-  public async editaDescrição(email: string, senha: string, nome: string, tarefa: Tarefa): Promise<void> {
-    // Implemente a lógica para editar a descrição de uma tarefa aqui
+  public editarDescricaoTarefa(email: string, nome: string, descr: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!";
+      }
+      const resultado = perfil.atualizarDescrTarefa(nome, descr);
+      if (resultado) {
+        this.mapaPerfis.set(email, perfil);
+        return "Descrição da tarefa atualizada com sucesso!";
+      }
+      return "Tarefa não encontrada!"
+    }
+    return "Email inválido!";
   }
 
-  public async excluiTarefa(email: string, senha: string, tarefa: Tarefa): Promise<void> {
-    // Implemente a lógica para excluir uma tarefa do perfil aqui
+  public excluirTarefa(email: string, nome: string): boolean {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return false;
+      }
+      const resultado = perfil.excluirTarefa(nome);
+      if (resultado) {
+        this.mapaPerfis.set(email, perfil);
+        return resultado;
+      }
+      return false;
+    }
+    return false;
   }
 
-  public async visualiza(email: string, senha: string, tarefa: Tarefa): Promise<string> {
-    // Implemente a lógica para visualizar uma tarefa do perfil aqui
+  public visualizarTarefas(email: string): string {
+    if (this.mapaPerfis.has(email)) {
+      const perfil = this.mapaPerfis.get(email)!;
+      if (!perfil.getModel().usuarioLogado) {
+        return "Faça login antes!"
+      }
+      return perfil.visualizarTarefas();
+    }
+    return "Email inválido!";
   }
 }
 
-export default TarefaRepository;
+export default PerfilRepository;
